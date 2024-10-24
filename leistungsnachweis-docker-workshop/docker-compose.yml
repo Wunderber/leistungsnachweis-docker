@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  assessment:
+    image: mrksdh/assessment
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/v1/dataset"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+    networks:
+      - myNetwork
+
+  leistungsnachweis-docker-workshop:
+    build: .
+    container_name: leistungsnachweis-docker-workshop
+    depends_on:
+      - assessment
+    networks:
+      - myNetwork
+
+networks:
+  myNetwork:
+    internal: true
